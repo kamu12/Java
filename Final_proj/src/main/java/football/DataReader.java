@@ -2,6 +2,7 @@ package football;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.SQLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +20,8 @@ public class DataReader{
     private JavaSparkContext sc;
 
 
-    public void read() {
+    public DataFrame read() {
         SQLContext sqlContext = new SQLContext(sc);
-
-//        DataFrame dataFrame = sqlContext.read().format("com.databricks.spark.csv")
-//                .option("delimiter", ";")
-//                .option("header", "false")
-//                .load("data/rawData.txt");
-//
-//        Row first = dataFrame.first();
-//        int count = (int) dataFrame.count();
-//        dataFrame.unionAll(first.);
-//        dataFrame.printSchema();
 
         JavaRDD<String> rdd = sc.textFile("data/rawData.txt");
         rdd.persist(MEMORY_AND_DISK());
@@ -49,8 +40,6 @@ public class DataReader{
             return event;
         });
 
-        eventRdd.foreach(row -> System.out.println(row));
-//        System.out.println(eventRdd.count());
-//        System.out.println(eventRdd.toString());
+        return sqlContext.createDataFrame(eventRdd, FootballEvent.class);
     }
 }

@@ -7,19 +7,17 @@ import org.apache.spark.sql.SQLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 import static football.DataUtils.parseItem;
 import static org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK;
 
 @Service
-public class DataReader{
+public class DataReader implements Reader {
 
     @Autowired
     private JavaSparkContext sc;
 
 
+    @Override
     public DataFrame read() {
         SQLContext sqlContext = new SQLContext(sc);
 

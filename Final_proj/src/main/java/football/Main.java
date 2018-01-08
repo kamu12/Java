@@ -3,20 +3,28 @@ package football;
 import org.apache.spark.sql.DataFrame;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.ArrayList;
+
 import static football.Const.DEV;
 
 public class Main {
     public static void main(String[] args) {
-        System.setProperty("spring.profiles.active", DEV);
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
 
         DataReader reader = context.getBean(DataReader.class);
+
         DataProcessor dataProcessor = context.getBean(DataProcessor.class);
 
-        DataFrame dataFrame = reader.read();
-        DataFrame processData = dataProcessor.processData(dataFrame);
+        ArrayList<Validator> validators = new ArrayList<Validator>();
+        validators.add(context.getBean(TimeValidator.class));
+        dataProcessor.setDataValidators(validators);
 
-        //for test purposes
-        processData.toJavaRDD().foreach(System.out::println);
+        ArrayList<Enricher> enrichers = new ArrayList<Enricher>();
+        dataProcessor.setDataEnrichers(enrichers);
+
+        DataFrame dataFrame = reader.read();
+        dataFrame.show(false);
+        DataFrame processData = dataProcessor.processData(dataFrame);
+        processData.show(false);
     }
 }

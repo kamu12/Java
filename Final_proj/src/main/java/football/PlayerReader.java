@@ -7,11 +7,6 @@ import org.apache.spark.sql.SQLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import static org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK;
 
 @Service
@@ -19,7 +14,6 @@ public class PlayerReader implements Reader {
 
     @Autowired
     private JavaSparkContext sc;
-
 
     @Override
     public DataFrame read() {

@@ -17,6 +17,7 @@ public class Main {
 
         ArrayList<Validator> validators = new ArrayList<Validator>();
         validators.add(context.getBean(TimeValidator.class));
+        validators.add(context.getBean(PlayerValidator.class));
         dataProcessor.setDataValidators(validators);
 
         ArrayList<Enricher> enrichers = new ArrayList<Enricher>();
@@ -24,7 +25,7 @@ public class Main {
 
         DataFrame dataFrame = reader.read();
         dataFrame.show(false);
-        DataFrame processData = dataProcessor.processData(dataFrame);
-        processData.show(false);
+//        DataFrame processData = dataProcessor.processData(dataFrame);
+//        processData.show(false);
     }
 }
